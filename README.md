@@ -1,2 +1,3 @@
-# YangSeChan-Game
-LLM 양세찬 게임 만들기
+# 양세찬 게임
+
+![wbs](/img/preview.png)
