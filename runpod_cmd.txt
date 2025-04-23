@@ -1,0 +1,41 @@
+apt update
+
+apt install lshw
+
+(curl -fsSL https://ollama.com/install.sh | sh && ollama serve > ollama.log 2>&1) &
+
+pip install --user huggingface-hub
+
+echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
+
+source ~/.bashrc
+
+
+-------------------------------------------------- 재시작
+
+ollama
+
+huggingface-cli download heegyu/EEVE-Korean-Instruct-10.8B-v1.0-GGUF ggml-model-Q5_K_M.gguf --local-dir ./models --local-dir-use-symlinks False
+
+cat << EOF > Modelfile
+FROM ./models/ggml-model-Q5_K_M.gguf
+
+TEMPLATE """{{- if .System }}
+<s>{{ .System }}</s>
+{{- end }}
+<s>Human:
+{{ .Prompt }}</s>
+<s>Assistant:
+"""
+
+SYSTEM """A chat between a curious user and an artificial intelligence assistant. The assistant gives helpful, detailed, and polite answers to the user's questions."""
+
+PARAMETER stop <s>
+PARAMETER stop </s>
+EOF
+
+ollama create EEVE-Korean-10.8B -f ./Modelfile
+
+pip install ollama
+
+pip install gradio
