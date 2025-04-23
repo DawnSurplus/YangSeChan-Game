@@ -5,6 +5,9 @@
 # gitignore template for Jupyter Notebooks
 # website: http://jupyter.org/
 
+.gradio/*
+*.gguf
+
 .ipynb_checkpoints
 */.ipynb_checkpoints/*
 
