@@ -1,4 +1,4 @@
-# 양세찬 게임을 곁들인 LLM 교육용 게임 프로젝트
+# 양세찬 게임을 통한 최적의 프롬프트 찾기
 
 <br/>
 
@@ -13,7 +13,7 @@
 
 
 ## 🔖 프로젝트 개요
-- 프로젝트 제목 : 양세찬 게임을 곁들인 Prompt Engineering 교육용 게임
+- 프로젝트 제목 : 양세찬 게임을 통한 최적의 프롬프트 찾기
 
 - 설명 : 런닝맨의 '양세찬 게임(콜 마이 네임)' 규칙을 기반으로 AI와 사람이 번갈아 질문/답변/캐릭터 추론을 하며, LLM 프롬프트 엔지니어링을 실습할 수 있는 웹 기반 게임
 
@@ -69,6 +69,8 @@
 
 
 ## 🎲 게임 구현
+- ### https://cb8a01c46187131635.gradio.live
+
 ### 1. UI 구성
 - Game Section
 ![ui](/img/ui_1.png)
@@ -82,15 +84,40 @@
 3. <게임시작>
 ![ui](/img/sequence.png)
 
-### 3. 
+### 3. 게임 Flow
+- Player 수 2명 설정 (User, AI)
+- 게임 시작 >> 사용자(-> AI) 질문 >> 사용자 답변 >> AI(-> 사용자) 질문 >> AI(-> AI) 캐릭터 유추 >> AI 답변 >> 사용자(-> AI) 질문 >> ...반복 >> 누군가 정답 혹은 20라운드 후 게임종료
 
+### 4. 게임 설정
+- Parameter
+  - Temperature : 출력의 무작위성(창의성) 조절
+    - range : [0 ~ 1]
+    - default=0.3
+- Prompt
+  - stop 옵션 지원 : 모델이 특정 토큰을 생성할 때, 응답 생성을 중단하고 출력
+    - `["<|im_start|>", "<|im_end|>", "<|eot_id|>"]` 적용
+  - System Prompt : AI 모델 공통 system role 설정 관련
+    - 객체 생성 시, 처음 한 번만 적용
+  - Question Prompt : AI 모델이 자신의 캐릭터를 추측하기 위해 다른 플레이어에게 할 질문 관련 Prompt
+    - 변수 지원
+      - `{topic}` : 주제 (ex. 연예인, 드라마/영화 인물, 등)
+  - Answer Prompt : 상대 플레이어 질문에 대한 AI 모델의 답 관련 Prompt
+    - 변수 지원
+      - `{topic}` : 주제 (ex. 연예인, 드라마/영화 인물, 등)
+      - `{question}` : 상대 플레이어의 질문
+      - `{character}` : 상대 플레이어의 캐릭터
+  - Guess Prompt : AI 모델이 자신의 캐릭터를 유추하기 위한 Prompt
+    - 변수 지원
+      - `{topic}` : 주제 (ex. 연예인, 드라마/영화 인물, 등)
 
+### 5. 게임 결과
+#### 1. 기본 Setting 적용
+![result](/img/result1.png)
+![result](/img/result2.png)
 
-### 4. 
-
-
-
-### 5. 
+#### 2. Temperature 및 Prompt 변경
+![result](/img/result3.png)
+![result](/img/result4.png)
 
 ---
 
@@ -101,9 +128,9 @@
 ## 👨‍🔧 프로젝트 문제 및 개선점
 - 사용자가 전달한 질문에 대해서는 일부 수행 가능하나, AI가 직접 본인의 캐릭터에 대한 질의나 유추하는 부분의 성능이 떨어짐
 
-### 1. 다양한 LLM 지원
+### 1. 다양한 LLM 모델 지원
 - 현재는 EEVE 단일 LLM만 지원
-- llama 또는 gpt 모델 등을 선택할 수 있도록 하여 다양한 모델에 따른 Prompt Test 가능
+- llama 또는 gpt 모델 등을 선택할 수 있도록 하여 다양한 모델에 따른 Prompt Test 및 모델 성능 Test 가능
 
 ### 2. 프롬프트 및 Option Parameter 확장
 - 현재 한정된 프롬프트 및 Temperature Option 한 개만 적용
