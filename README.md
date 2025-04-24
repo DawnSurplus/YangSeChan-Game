@@ -69,7 +69,6 @@
 
 
 ## 🎲 게임 구현
-- ### https://e0ed3f70a3eb1b44e3.gradio.live
 
 ### 1. UI 구성
 - Game Section
